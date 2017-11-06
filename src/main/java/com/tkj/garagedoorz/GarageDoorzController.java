@@ -1,4 +1,4 @@
-package com.example.garagedoorz;
+package com.tkj.garagedoorz;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,32 +10,22 @@ import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
+/**
+ * REST controler that maps REST endpoints to hardware control.
+ * @author Thomas G. Kenny Jr
+ *
+ */
 @RestController
 public class GarageDoorzController {
 	
 	@RequestMapping("/")
-	public String HelloFucknutz() {
+	public String HelloDoorz() {
 		return "Hello Doorz";
 	}
 	
 	@RequestMapping("/getGarageStatus")
 	public GarageStatus getGarageStatus() {
-		
-		// create gpio controller
-        final GpioController gpio = GpioFactory.getInstance();
-
-        // provision gpio pin #01 as an output pin and turn on
-        final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "MyLED", PinState.HIGH);
-
-        // set shutdown state for this pin
-        pin.setShutdownOptions(true, PinState.LOW);
-
-
-        // turn off gpio pin #01
-        pin.low();
-        System.out.println("--> GPIO state should be: OFF");
-		
-		return new GarageStatus(0,0);
+		return new GarageStatus(GarageDoorzHwController.getGarageDoors());
 	}
 	
 	@RequestMapping("/isDoorOpen")
