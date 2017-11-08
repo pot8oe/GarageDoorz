@@ -47,7 +47,6 @@ public class GarageDoorzController {
 	 */
 	@RequestMapping( "/{door}/isDoorClosed" )
 	public boolean isDoorClosed( @PathVariable int door ) {
-		
 		return hwController.isDoorClosed( door );
 	}
 	
@@ -59,7 +58,6 @@ public class GarageDoorzController {
 	@ResponseStatus( HttpStatus.ACCEPTED )
 	public void pressDoorButton( @PathVariable int door ) {
 		hwController.pressDoorButton( door );
-
 	}
 	
 	/**
