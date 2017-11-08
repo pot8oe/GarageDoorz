@@ -1,12 +1,8 @@
 package com.tkj.garagedoorz;
 
-import com.pi4j.io.gpio.GpioController;
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalInput;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinPullResistance;
-import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
 /**
@@ -15,7 +11,10 @@ import com.pi4j.io.gpio.RaspiPin;
  * @author Thomas G. Kenny Jr.
  */
 public final class GarageDoorzHwController {
-
+	 
+	@Autowired
+	static Environment environment;
+	
 	/**
 	 * Attention! The GPIO pin numbering used in these constants is intended for use with
 	 * WiringPi or Pi4J. This pin numbering is not the raw Broadcom GPIO pin numbers.
@@ -31,58 +30,10 @@ public final class GarageDoorzHwController {
 	/**
 	 * Static members
 	 */
-	final static GpioController gpio = GpioFactory.getInstance();
 	static boolean initialized = false;
-	static GarageDoor[] doors;
+	static IGarageDoor[] doors;
 	
-	/**
-	 * Represents a single garage door with a button and open/closed sensor.
-	 * Hardware interface is Pi4J to access Raspberry Pi GPIO pins.
-	 * @author Thomas G. Kenny Jr.
-	 */
-	public static class GarageDoor {
-		String name;
-		GpioPinDigitalOutput pinOutActuator;
-		GpioPinDigitalInput pinInPosition;
-		
-		public GarageDoor(String doorName, Pin actuator, Pin position) {
-			name = doorName;
-			pinOutActuator = gpio.provisionDigitalOutputPin(
-					actuator, name + "_actuator", PinState.LOW);
-			pinOutActuator.setShutdownOptions(true, PinState.LOW);
-			pinInPosition = gpio.provisionDigitalInputPin(
-	        		position, name + "_position", PinPullResistance.PULL_UP);
-		}
-		
-		/**
-		 * Gets the garage door name
-		 * @return
-		 */
-		public String getName() {
-			return name;
-		}
-		
-		/**
-		 * Presses the garage door button
-		 */
-		public void pressDoorButton() {
-			pinOutActuator.high();
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			pinOutActuator.low();
-		}
-		
-		/**
-		 * Returns if the garage door is open
-		 * @return
-		 */
-		public boolean isDoorOpen() {
-			return pinInPosition.isLow();
-		}
-	}
+	
 	
 	/**
 	 * Returns true if given index is in valid for doors array.
@@ -105,11 +56,20 @@ public final class GarageDoorzHwController {
 	public static void initializeHardware() {
 		
 		if(initialized) return;
+		
+		if(environment.acceptsProfiles("hw_rpi")) {
+			doors = new IGarageDoor[] {
+					new GarageDoorRPi(Door1_Name, GarageDoorzHwController.Door1_Actuator_GPIO, GarageDoorzHwController.Door1_Position_Sensor_GPIO),
+					new GarageDoorRPi(Door2_Name, GarageDoorzHwController.Door2_Actuator_GPIO, GarageDoorzHwController.Door2_Position_Sensor_GPIO)
+				};
+		} else {
+			doors = new IGarageDoor[] {
+					new GarageDoorEmulator(Door1_Name),
+					new GarageDoorEmulator(Door2_Name)
+				};
+		}
 
-		doors = new GarageDoor[] {
-			new GarageDoor(Door1_Name, GarageDoorzHwController.Door1_Actuator_GPIO, GarageDoorzHwController.Door1_Position_Sensor_GPIO),
-			new GarageDoor(Door2_Name, GarageDoorzHwController.Door2_Actuator_GPIO, GarageDoorzHwController.Door2_Position_Sensor_GPIO)
-		};
+		
 		
         initialized = true;
 	}
@@ -138,7 +98,7 @@ public final class GarageDoorzHwController {
 	 * @param doorIndex
 	 * @return The requested GarageDoor object
 	 */
-	public static GarageDoor getGarageDoor(int doorIndex) {
+	public static IGarageDoor getGarageDoor(int doorIndex) {
 		if(!isIndexValid(doorIndex)) throw new IndexOutOfBoundsException();
 		return doors[doorIndex];
 	}
@@ -146,7 +106,7 @@ public final class GarageDoorzHwController {
 	/**
 	 * @return The array of GarageDoors.
 	 */
-	public static GarageDoor[] getGarageDoors() {
+	public static IGarageDoor[] getGarageDoors() {
 		return doors;
 	}
 	

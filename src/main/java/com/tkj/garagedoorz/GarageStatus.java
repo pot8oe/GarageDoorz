@@ -1,11 +1,12 @@
 package com.tkj.garagedoorz;
 
-import com.tkj.garagedoorz.GarageDoorzHwController.GarageDoor;
+import org.springframework.stereotype.Component;
 
 /**
  * GarageStatus Model represents the state of all doors in a garage.
  * @author Thomas G. Kenny Jr.
  */
+@Component
 public class GarageStatus {
 	
 	/**
@@ -42,7 +43,7 @@ public class GarageStatus {
 	 * The hardware state of each door is read during construction.
 	 * @param doors
 	 */
-	public GarageStatus(GarageDoor[] doors) {
+	public GarageStatus(IGarageDoor[] doors) {
 		doorStatuses = new DoorStatus[doors.length];
 		
 		for(int i=0; i<doors.length; i++) {
