@@ -6,7 +6,7 @@ public interface HwController {
 
     void pressDoorButton( int doorIndex );
 
-    boolean isDoorOpen( int doorIndex );
+    boolean isDoorClosed( int doorIndex );
 
     List<DoorStatus> getGarageDoorStatuses();
 

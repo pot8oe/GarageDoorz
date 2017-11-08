@@ -4,16 +4,12 @@ import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalInput;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.Pin;
 import com.pi4j.io.gpio.PinPullResistance;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -55,11 +51,11 @@ public class GarageDoorzHwController implements HwController {
 	
 	/**
 	 * @param doorIndex
-	 * @return True if door is open.
+	 * @return True if door is closed.
 	 */
-	public boolean isDoorOpen( int doorIndex ) {
+	public boolean isDoorClosed( int doorIndex ) {
 
-        return doors.get( doorIndex ).isDoorOpen();
+        return doors.get( doorIndex ).isDoorClosed();
 	}
 	
 	/**
@@ -69,12 +65,12 @@ public class GarageDoorzHwController implements HwController {
 	public List<DoorStatus> getGarageDoorStatuses() {
 
 	    return doors.stream()
-                .map( door -> new DoorStatus( door.getName(), door.isDoorOpen() ) )
+                .map( door -> new DoorStatus( door.getName(), door.isDoorClosed() ) )
                 .collect( toList() );
 	}
 
     /**
-     * Represents a single garage door with a button and open/closed sensor.
+     * Represents a single garage door with a button and closed sensor.
      * Hardware interface is Pi4J to access Raspberry Pi GPIO pins.
      * @author Thomas G. Kenny Jr.
      */
@@ -82,14 +78,14 @@ public class GarageDoorzHwController implements HwController {
 
         String name;
         GpioPinDigitalOutput pinOutActuator;
-        GpioPinDigitalInput pinInPosition;
+        GpioPinDigitalInput pinInIsClosed;
 
         public GpioGarageDoor( GarageDoor garageDoor ) {
 
             name = garageDoor.getName();
             pinOutActuator = gpio.provisionDigitalOutputPin( RaspiPin.getPinByAddress( garageDoor.getPinOutActuator() ), name + "_actuator", PinState.LOW );
             pinOutActuator.setShutdownOptions(true, PinState.LOW );
-            pinInPosition = gpio.provisionDigitalInputPin( RaspiPin.getPinByAddress( garageDoor.getPinInPosition() ), name + "_position", PinPullResistance.PULL_UP );
+            pinInIsClosed = gpio.provisionDigitalInputPin( RaspiPin.getPinByAddress( garageDoor.getPinInPosition() ), name + "_position", PinPullResistance.PULL_UP );
 
         }
 
@@ -98,7 +94,6 @@ public class GarageDoorzHwController implements HwController {
          * @return
          */
         public String getName() {
-
             return name;
         }
 
@@ -106,24 +101,15 @@ public class GarageDoorzHwController implements HwController {
          * Presses the garage door button
          */
         public void pressDoorButton() {
-
-            pinOutActuator.high();
-            try {
-                Thread.sleep(250 );
-            } catch( InterruptedException e ) {
-                e.printStackTrace();
-            }
-            pinOutActuator.low();
-
+        	pinOutActuator.pulse(500);
         }
 
         /**
-         * Returns if the garage door is open
+         * Returns if the garage door is closed
          * @return
          */
-        public boolean isDoorOpen() {
-
-            return pinInPosition.isLow();
+        public boolean isDoorClosed() {
+            return pinInIsClosed.isLow();
         }
 
     }

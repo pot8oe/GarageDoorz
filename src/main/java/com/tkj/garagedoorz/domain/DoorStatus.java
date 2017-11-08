@@ -7,12 +7,12 @@ package com.tkj.garagedoorz.domain;
 public class DoorStatus {
 
     final private String name;
-    final private boolean isOpen;
+    final private boolean isClosed;
 
-    public DoorStatus( final String doorName, final boolean isDoorOpen ) {
+    public DoorStatus( final String doorName, final boolean isDoorClosed ) {
 
         name = doorName;
-        isOpen = isDoorOpen;
+        isClosed = isDoorClosed;
 
     }
 
@@ -20,8 +20,8 @@ public class DoorStatus {
         return name;
     }
 
-    public boolean isDoorOpen() {
-        return isOpen;
+    public boolean isDoorClosed() {
+        return isClosed;
     }
 
 }

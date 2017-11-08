@@ -27,7 +27,7 @@ public class GarageDoorzConfig {
             }
 
             @Override
-            public boolean isDoorOpen( int doorIndex ) {
+            public boolean isDoorClosed( int doorIndex ) {
 
                 return false;
             }
