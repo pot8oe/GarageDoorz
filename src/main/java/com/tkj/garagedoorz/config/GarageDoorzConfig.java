@@ -47,9 +47,9 @@ public class GarageDoorzConfig {
 
         @Bean( "door1" )
         public GarageDoor door1(
-                @Value( "${garagedoorz.doors.tom.label}" ) String doorName,
-                @Value( "${garagedoorz.doors.tom.actuator}" ) int actuator,
-                @Value( "${garagedoorz.doors.tom.position-sensor}" ) int positionSensor
+                @Value( "${garagedoorz.doors.jill.label}" ) String doorName,
+                @Value( "${garagedoorz.doors.jill.actuator}" ) int actuator,
+                @Value( "${garagedoorz.doors.jill.position-sensor}" ) int positionSensor
         ) {
 
             return new GarageDoor( doorName, actuator, positionSensor );
