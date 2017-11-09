@@ -68,7 +68,7 @@ public class GarageDoorzConfig {
         @Bean
         public HwController hwController( final GarageDoor door1, final GarageDoor door2 ) {
 
-            return new GarageDoorzHwController( new GarageDoor[] { door1, door2 } );
+            return new GarageDoorzHwController( door1, door2 );
         }
 
     }
