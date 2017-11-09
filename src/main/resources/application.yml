@@ -1,0 +1,10 @@
+garagedoorz:
+  doors:
+    jill:
+      label: Jill's Door
+      actuator: 15
+      position-sensor: 0
+    tom:
+      label: Tom's Door
+      actuator: 16
+      position-sensor: 2
