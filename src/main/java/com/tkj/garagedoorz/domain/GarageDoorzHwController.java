@@ -83,8 +83,8 @@ public class GarageDoorzHwController implements HwController {
         public GpioGarageDoor( GarageDoor garageDoor ) {
 
             name = garageDoor.getName();
-            pinOutActuator = gpio.provisionDigitalOutputPin( RaspiPin.getPinByAddress( garageDoor.getPinOutActuator() ), name + "_actuator", PinState.LOW );
-            pinOutActuator.setShutdownOptions(true, PinState.LOW );
+            pinOutActuator = gpio.provisionDigitalOutputPin( RaspiPin.getPinByAddress( garageDoor.getPinOutActuator() ), name + "_actuator", PinState.HIGH );
+            pinOutActuator.setShutdownOptions(true, PinState.HIGH );
             pinInIsClosed = gpio.provisionDigitalInputPin( RaspiPin.getPinByAddress( garageDoor.getPinInPosition() ), name + "_position", PinPullResistance.PULL_UP );
 
         }
@@ -101,7 +101,7 @@ public class GarageDoorzHwController implements HwController {
          * Presses the garage door button
          */
         public void pressDoorButton() {
-        	pinOutActuator.pulse(500);
+        	pinOutActuator.pulse(500, PinState.LOW);
         }
 
         /**
