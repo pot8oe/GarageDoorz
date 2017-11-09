@@ -16,29 +16,35 @@ import static java.util.Collections.singletonList;
 @Configuration
 public class GarageDoorzConfig {
 
-    @Bean
-    public HwController hwController() {
+    @Profile( "default" )
+    @Configuration
+    public static class Default {
 
-        return new HwController() {
+        @Bean
+        public HwController hwController() {
 
-            @Override
-            public void pressDoorButton( int doorIndex ) {
+            return new HwController() {
 
-            }
+                @Override
+                public void pressDoorButton( int doorIndex ) {
 
-            @Override
-            public boolean isDoorClosed( int doorIndex ) {
+                }
 
-                return false;
-            }
+                @Override
+                public boolean isDoorClosed( int doorIndex ) {
 
-            @Override
-            public List<DoorStatus> getGarageDoorStatuses() {
+                    return false;
+                }
 
-                return singletonList( new DoorStatus( "Test Door", false ) );
-            }
+                @Override
+                public List<DoorStatus> getGarageDoorStatuses() {
 
-        };
+                    return singletonList( new DoorStatus( "Test Door", false ) );
+                }
+
+            };
+        }
+
     }
 
     @Profile( "pi" )
@@ -68,7 +74,7 @@ public class GarageDoorzConfig {
         @Bean
         public HwController hwController( final GarageDoor door1, final GarageDoor door2 ) {
 
-            return new GarageDoorzHwController( new GarageDoor[] { door1, door2 } );
+            return new GarageDoorzHwController( door1, door2 );
         }
 
     }
