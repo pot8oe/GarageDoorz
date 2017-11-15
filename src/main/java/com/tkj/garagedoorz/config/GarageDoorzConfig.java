@@ -4,6 +4,8 @@ import com.tkj.garagedoorz.domain.DoorStatus;
 import com.tkj.garagedoorz.domain.GarageDoor;
 import com.tkj.garagedoorz.domain.GarageDoorzHwController;
 import com.tkj.garagedoorz.domain.HwController;
+import com.tkj.garagedoorz.health.DoorStatusHealthIndicator;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +77,11 @@ public class GarageDoorzConfig {
         public HwController hwController( final GarageDoor door1, final GarageDoor door2 ) {
 
             return new GarageDoorzHwController( door1, door2 );
+        }
+        
+        @Bean
+        public DoorStatusHealthIndicator doorStatusHealtIndicator( final HwController hwController) {
+        	return new DoorStatusHealthIndicator( hwController );
         }
 
     }

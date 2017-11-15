@@ -33,14 +33,6 @@ public class GarageDoorzController {
 	}
 	
 	/**
-	 * @return The status of the Garage.
-	 */
-	@RequestMapping( "/getGarageStatus" )
-	public List<DoorStatus> getGarageStatus() {
-		return hwController.getGarageDoorStatuses();
-	}
-	
-	/**
 	 * Return if the door is closed. At present we do not have any in motion state information.
 	 * @param door Index of door to read position state. Defaults to 0 (first door).
 	 * @return True if door is closed.
