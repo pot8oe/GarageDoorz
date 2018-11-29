@@ -1,4 +1,4 @@
-package com.tkj.garagedoorz;
+package com.tkj.garagedoorz
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
