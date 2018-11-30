@@ -12,4 +12,17 @@ class DoorStatus( val doorName: String, val isDoorClosed: Boolean ) {
     val status: String
         get() = if ( isDoorClosed ) STATUS_CLOSED else STATUS_OPEN
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DoorStatus) return false
+
+        if (doorName != other.doorName) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return doorName.hashCode()
+    }
+
 }

@@ -1,0 +1,7 @@
+
+garagedoorz:
+  doors:
+    test:
+      label: Test Door
+      actuator: 1
+      position-sensor: 0
