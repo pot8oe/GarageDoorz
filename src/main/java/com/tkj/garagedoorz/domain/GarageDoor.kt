@@ -24,7 +24,11 @@ class GarageDoor(
 
         val input = gpio.provisionDigitalInputPin( RaspiPin.getPinByAddress( pinInPosition ), name + "_position", PinPullResistance.PULL_UP )
 
-        return input.isLow
+        val isLow = input.isLow
+
+        gpio.unprovisionPin(input)
+
+        return isLow
     }
 
     /**
