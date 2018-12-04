@@ -26,6 +26,30 @@ class GarageDoorzHwController( private val doors: List<GarageDoor> ) : HwControl
         return doors[ doorIndex ].isDoorClosed()
     }
 
+    override fun openDoor( doorIndex: Int): Boolean {
+
+        if( isDoorClosed( doorIndex ) ) {
+
+            pressDoorButton( doorIndex )
+
+            return true
+        }
+
+        return false
+    }
+
+    override fun closeDoor( doorIndex: Int ): Boolean {
+
+        if( !isDoorClosed( doorIndex ) ) {
+
+            pressDoorButton( doorIndex )
+
+            return true
+        }
+
+        return false
+    }
+
     /**
      * @return The array of GarageDoors.
      */
