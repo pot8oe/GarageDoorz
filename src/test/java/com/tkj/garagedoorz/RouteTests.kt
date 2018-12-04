@@ -14,8 +14,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 
 @RunWith( SpringRunner::class )
 @WebFluxTest
-@Import( GarageDoorzRoute::class )
-class GarageDoorzRouteTests {
+@Import( Route::class, Handler::class )
+class RouteTests {
 
     @Autowired
     private lateinit var client: WebTestClient

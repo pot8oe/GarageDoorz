@@ -26,7 +26,7 @@ class GarageDoor(
 
         val isLow = input.isLow
 
-        gpio.unprovisionPin(input)
+        gpio.unprovisionPin( input )
 
         return isLow
     }
@@ -42,7 +42,8 @@ class GarageDoor(
 
         output.pulse( 500, PinState.LOW )
 
-        gpio.unprovisionPin(output)
+        gpio.unprovisionPin( output )
+
     }
 
 }

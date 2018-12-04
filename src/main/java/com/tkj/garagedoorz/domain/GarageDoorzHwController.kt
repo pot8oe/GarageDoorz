@@ -1,10 +1,13 @@
 package com.tkj.garagedoorz.domain
 
+import org.springframework.stereotype.Component
+
 /**
  * GarageDoorzHwController manages an array of garage doors which are interfaces to through
  * Raspberry Pi GPIO pins.
  * @author Thomas G. Kenny Jr.
  */
+@Component
 class GarageDoorzHwController( private val doors: List<GarageDoor> ) : HwController {
 
     /**
