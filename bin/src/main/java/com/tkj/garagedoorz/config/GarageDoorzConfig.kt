@@ -2,13 +2,10 @@ package com.tkj.garagedoorz.config
 
 import com.pi4j.io.gpio.GpioController
 import com.pi4j.io.gpio.GpioFactory
-import com.pi4j.io.gpio.GpioProvider
-import com.pi4j.io.gpio.PinState
-import com.pi4j.io.gpio.test.MockGpioFactory
-import com.pi4j.io.gpio.test.MockPin
 import com.tkj.garagedoorz.domain.GarageDoor
-import com.tkj.garagedoorz.domain.MockGarageDoor
-import com.tkj.garagedoorz.domain.RpiGarageDoor
+import com.tkj.garagedoorz.domain.GarageDoorzHwController
+import com.tkj.garagedoorz.domain.HwController
+import com.tkj.garagedoorz.health.DoorStatusHealthIndicator
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,40 +15,15 @@ import org.springframework.core.annotation.Order
 @Configuration
 class GarageDoorzConfig {
 
-    @Configuration
-    @Profile( "default" )
-    class GarageDoorzMockConfig {
+    @Bean
+    fun hwController( doors: List<GarageDoor> ): HwController {
 
-        @Bean
-        fun gpioProvider(): GpioProvider {
-
-            val provider = MockGpioFactory.getMockProvider()
-
-            provider.setMockState( MockPin.DIGITAL_INPUT_PIN, PinState.LOW )
-            provider.setMockState( MockPin.DIGITAL_OUTPUT_PIN, PinState.LOW )
-
-            return provider
-        }
-
-        @Bean
-        fun gpioController(): GpioController {
-
-            return MockGpioFactory.getInstance()
-        }
-
-        @Bean( "door1" )
-        fun door1(
-                gpio: GpioController
-        ): GarageDoor {
-
-            return MockGarageDoor( gpio )
-        }
-
+        return GarageDoorzHwController( doors )
     }
 
-    @Configuration
     @Profile( "pi" )
-    class GarageDoorzPiConfig {
+    @Configuration
+    class Pi {
 
         @Bean
         fun gpioController(): GpioController {
@@ -68,7 +40,7 @@ class GarageDoorzConfig {
                 @Value( "\${garagedoorz.doors.jill.position-sensor}" ) positionSensor: Int
         ): GarageDoor {
 
-            return RpiGarageDoor( gpio, doorName, actuator, positionSensor )
+            return GarageDoor( gpio, doorName, actuator, positionSensor )
         }
 
         @Bean( "door2" )
@@ -80,7 +52,13 @@ class GarageDoorzConfig {
                 @Value( "\${garagedoorz.doors.tom.position-sensor}" ) positionSensor: Int
         ): GarageDoor {
 
-            return RpiGarageDoor( gpio, doorName, actuator, positionSensor )
+            return GarageDoor( gpio, doorName, actuator, positionSensor )
+        }
+
+        @Bean
+        fun doorStatusHealtIndicator( hwController: HwController ): DoorStatusHealthIndicator {
+
+            return DoorStatusHealthIndicator( hwController )
         }
 
     }

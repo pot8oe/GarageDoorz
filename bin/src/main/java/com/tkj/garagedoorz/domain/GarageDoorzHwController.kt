@@ -1,13 +1,10 @@
 package com.tkj.garagedoorz.domain
 
-import org.springframework.stereotype.Component
-
 /**
- * GarageDoorzHwController manages an array of garage doors which are interfaces to through
+ * GarageDoorzRepository manages an array of garage doors which are interfaces to through
  * Raspberry Pi GPIO pins.
  * @author Thomas G. Kenny Jr.
  */
-@Component
 class GarageDoorzHwController( private val doors: List<GarageDoor> ) : HwController {
 
     /**
@@ -27,30 +24,6 @@ class GarageDoorzHwController( private val doors: List<GarageDoor> ) : HwControl
     override fun isDoorClosed( doorIndex: Int ): Boolean {
 
         return doors[ doorIndex ].isDoorClosed()
-    }
-
-    override fun openDoor( doorIndex: Int): Boolean {
-
-        if( isDoorClosed( doorIndex ) ) {
-
-            pressDoorButton( doorIndex )
-
-            return true
-        }
-
-        return false
-    }
-
-    override fun closeDoor( doorIndex: Int ): Boolean {
-
-        if( !isDoorClosed( doorIndex ) ) {
-
-            pressDoorButton( doorIndex )
-
-            return true
-        }
-
-        return false
     }
 
     /**

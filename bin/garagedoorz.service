@@ -1,0 +1,14 @@
+[Unit]
+Description=garagedoorz
+After=syslog.target
+
+[Service]
+User=pot8oe
+ExecStart=/usr/bin/java -Dspring.profiles.active=pi -Dpi4j.linking=dynamic -jar /opt/garagedoorz/garagedoorz.jar
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+
+
+[Install]
+WantedBy=multi-user.target

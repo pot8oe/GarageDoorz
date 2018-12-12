@@ -1,4 +1,9 @@
 
+logging.level:
+  org.springframework.web: TRACE
+  com.fasterxml.jackson: DEBUG
+  com.tkj.garagedoorz: DEBUG
+
 garagedoorz:
   doors:
     test:

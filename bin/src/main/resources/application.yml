@@ -1,8 +1,4 @@
 
-logging.level:
-  org.springframework.web: DEBUG
-  com.tkj.garagedoorz: DEBUG
-
 management:
   security:
     enabled: false

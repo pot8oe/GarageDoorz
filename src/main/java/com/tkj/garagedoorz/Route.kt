@@ -5,15 +5,15 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.router
 
 @Configuration
-class Route( private val handler: Handler ) {
+class Route( private val handler: Handler) {
 
     @Bean
     fun router() = router {
-        "/{door}".nest {
-            GET( "/isDoorClosed", handler::isDoorClosed )
-            GET( "/pressDoorButton", handler::pressDoorButton )
-            GET( "/openDoor", handler::openDoor )
-            GET( "/closeDoor", handler::closeDoor )
+        "/doors".nest {
+            GET( "/", handler::doorStatuses )
+            GET( "/{door}", handler::doorStatus )
+            GET( "/{door}/openDoor", handler::openDoor )
+            GET( "/{door}/closeDoor", handler::closeDoor )
         }
         GET( "/", handler::helloDoorz )
     }
