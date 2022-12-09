@@ -6,7 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GarageDoorzApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GarageDoorzApplication.class, args);
+	public static void main( String[] args ) {
+
+		SpringApplication.run( GarageDoorzApplication.class, args );
+
 	}
+
 }

@@ -1,0 +1,39 @@
+
+logging.level:
+  com.pi4j: DEBUG
+  com.tkj.garagedoorz: DEBUG
+
+spring:
+
+  application:
+    name: GarageDoorz
+
+doorz:
+  door-one:
+    id: 0
+    name: Jill's Door
+    actuator-gpio: 14
+    initial-state: LOW
+    shutdown-state: LOW
+
+  door-two:
+    id: 1
+    name: Tom's Door
+    actuator-gpio: 15
+    initial-state: LOW
+    shutdown-state: LOW
+
+  position-one:
+    id: 2
+    name: Jill's Door Position
+    position-gpio: 17
+    pull-resistance: PULL_UP
+    debounce: 250000
+
+  position-two:
+    id: 3
+    name: Tom's Door Position
+    position-gpio: 27
+    pull-resistance: PULL_UP
+    debounce: 250000
+
