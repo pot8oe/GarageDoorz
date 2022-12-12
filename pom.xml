@@ -20,7 +20,7 @@
 
 	<properties>
 
-		<java.version>19</java.version>
+		<java.version>17</java.version>
 
 		<pi4j.version>2.2.1</pi4j.version>
 
@@ -46,8 +46,8 @@
 		<!-- Third-party dependencies -->
 		<dependency>
 			<groupId>com.pi4j</groupId>
-			<artifactId>pi4j-core</artifactId>
-			<version>${pi4j.version}</version>
+			<artifactId>pi4j-starter</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.pi4j</groupId>
@@ -82,11 +82,19 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<builder>dashaun/native-builder:focal-arm64</builder>
+						<env>
+							<BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+						</env>
+						<name>${project.artifactId}:${project.version}-arm64</name>
+					</image>
+				</configuration>
 			</plugin>
 
 		</plugins>
 
 	</build>
-
 
 </project>

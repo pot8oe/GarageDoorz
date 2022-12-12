@@ -112,20 +112,8 @@ public class RpiAdapterTests {
     }
 
     @SpringBootConfiguration
-    @Import({ContextConfig.class, RpiAdapter.class})
+    @Import({ ContextConfig.class, RpiAdapter.class })
     static class TestConfiguration {
-
-        @Bean
-        String inputProvider() {
-
-            return MockDigitalInputProvider.ID;
-        }
-
-        @Bean
-        String outputProvider() {
-
-            return MockDigitalOutputProvider.ID;
-        }
 
         @Bean
         Context context() {
