@@ -1,0 +1,46 @@
+name: garagedoorz-build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - pi4j-starter
+
+jobs:
+
+  build:
+
+    runs-on: ARM64
+
+    steps:
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout pi4j-starter
+        uses: actions/checkout@v3
+        with:
+          repository: 'https://github.com/dmfrey/pi4j-springboot.git'
+          path: 'pi4j-starter'
+
+      - name: Build and Install pi4j-starter
+        run: |
+          cd pi4j-starter
+          ./mvnw clean install
+          cd ..
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: 'source'
+
+      - name: Build, Test, Container
+        run: |
+          cd source
+          ./mvnw -Pnative spring-boot:build-image
+          cd ..
